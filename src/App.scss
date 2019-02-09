@@ -1,0 +1,26 @@
+.App {
+    padding: 10vw;
+    text-align: center;
+}
+
+
+.tab {
+    &__nav {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        &-item {
+            padding: 5vw;
+        }
+    }
+    &__content {
+        &-item {
+            //display: none;
+
+            &.active {
+                display: block;
+            }
+        }
+    }
+}

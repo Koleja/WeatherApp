@@ -1,35 +1,42 @@
 import React, { Component } from 'react';
 
-export default class Place extends Component {
+export default class WeatherInfo extends Component {
     constructor(props) {
         super(props)
-
         this.state = {
-            weatherToShow: '',
+            weatherData: [],
         }
-
-        
     }
 
     componentDidMount() {
         this.setState({
-            weatherToShow: this.props.weatherToShow,
+            weatherData: this.props.weatherToShow,
         })
-
-        console.log(weatherToShow);
     }
 
-    
-    
 
     render() {
         return (
             <div>
-                <p>hejo</p>
-                {/* <p>temperature: {this.state.weatherToShow.temperature}</p>
-                <p>wind: {this.state.weatherToShow.wind}</p>
-                <p>pressure: {this.state.weatherToShow.pressure}</p>
-                <p>state: {this.state.weatherToShow.weather}</p> */}
+                {
+                    /* this.props.dataComing &&
+                    <div>
+                        {
+                            Object.keys(this.state.weatherData).map((keyName, i) => (
+                                <p key={i}>{keyName}: {this.state.weatherData[keyName]}</p>
+                            ))
+                        }
+                    </div> */
+                }
+                {
+                    this.props.dataComing &&
+                    <div>
+                        <p>Temperature: {this.state.weatherData.temperature} °C</p>
+                        <p>Overall: {this.state.weatherData.weather}</p>
+                        <p>Wind: {this.state.weatherData.wind} m/s</p>
+                        <p>Pressure: {this.state.weatherData.pressure} hPa</p>
+                    </div>
+                }
             </div>
         );
     }

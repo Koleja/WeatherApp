@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import './App.css';
+import './App.scss';
 import Place from './components/Place';
 import WeatherInfo from './components/WeatherInfo';
+import TabInfo from './components/TabInfo';
 
 class App extends Component {
 
@@ -13,12 +14,34 @@ class App extends Component {
       headerVisible: false,
       error: null,
       isLoaded: false,
+      clickedTab: '',
+      tomorrow: this.createDate(1),
+      dayAfterTomorrow: this.createDate(2),
+      secondDayAfterTomorrow: this.createDate(3),
       fullWeather: {
         temperature: '',
         wind: '',
         pressure: '',
         weather: '',
       },
+      forecastTomorrow: {
+        temperature: '',
+        wind: '',
+        pressure: '',
+        weather: ''
+      },
+      forecastDayAfterTomorrow: {
+        temperature: '',
+        wind: '',
+        pressure: '',
+        weather: ''
+      },
+      forecastSecondDayAfterTomorrow: {
+        temperature: '',
+        wind: '',
+        pressure: '',
+        weather: ''
+      }
     }
   }
 
@@ -30,15 +53,50 @@ class App extends Component {
       headerVisible: true
     })
 
-    this.apiCall(newPlace);
+    this.apiCallWeather(newPlace);
+    this.apiCallForecast(newPlace);
   }
 
-  apiCall(city) {
+  createDate(amount = 0) {
+
+    var today = new Date();
+    var dd = today.getDate() + amount;
+    var mm = today.getMonth() + 1; 
+    var yyyy = today.getFullYear();
+    //var defoultTime = ' 12:00:00'
+
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+    
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    var newDate = yyyy + '-' + mm + '-' + dd; 
+
+    return newDate
+  }
+
+  getForecast(forDay, apiEl, dayForecast) {
+
+    forDay += ' 12:00:00'
+
+    if (apiEl.dt_txt === forDay) {
+      dayForecast.temperature = this.KtoC(apiEl.main.temp);
+      dayForecast.pressure = apiEl.main.pressure;
+      dayForecast.weather = apiEl.weather[0].description;
+      dayForecast.wind = apiEl.wind.speed;
+
+      console.log(forDay + ': ' + dayForecast);
+    }
+    
+  }
+
+  apiCallWeather(city) {
 
     var apiKey = '03f879c605d001cf9f7eea837f5163fd';
     var apiBase = 'http://api.openweathermap.org/data/2.5/weather?q=' + city + '&APPID=' + apiKey;
-
-    console.log(apiBase);
 
     var self = this;
 
@@ -51,20 +109,61 @@ class App extends Component {
     }).then(res => res.json())
       .then(
         (result) => {
-          console.log('hejo');
+          console.log(result);
           self.setState({
-            isLoaded: true,
+            
             fullWeather: {
-              temperature: result.main,
+              temperature: self.KtoC(result.main.temp),
               weather: result.weather[0].description,
               pressure: result.main.pressure,
               wind: result.wind.speed
-            }
+            },
+            isLoaded: true,
           });
-          console.log(this.state.fullWeather);
         }
       );
+  }
 
+  apiCallForecast(city) {
+    var apiKey = '03f879c605d001cf9f7eea837f5163fd';
+    var apiBase = 'http://api.openweathermap.org/data/2.5/forecast?q=' + city + '&APPID=' + apiKey;
+
+    var self = this;
+
+    fetch(apiBase, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+    }).then(res => res.json())
+      .then(
+        (result) => {
+          var forecast = result.list;
+
+          forecast.forEach(function(el) {
+            self.getForecast(self.state.tomorrow, el, self.state.forecastTomorrow)
+            self.getForecast(self.state.dayAfterTomorrow, el, self.state.forecastDayAfterTomorrow) 
+            self.getForecast(self.state.secondDayAfterTomorrow, el, self.state.forecastSecondDayAfterTomorrow) 
+          });
+          self.setState({
+            isLoaded: true,
+          });
+        }
+      );
+  }
+
+  KtoC(temp) {
+    var newTemp = temp -273;
+    newTemp = Math.floor(newTemp);
+    return newTemp
+  }
+
+  onClickedTab(e) {
+    var tab = e.target;
+
+    this.setState({
+      clickedTab: tab.id
+    })
   }
 
   componentDidMount() {
@@ -77,14 +176,43 @@ class App extends Component {
       <div className="App">
           
           <Place newPlace={ (a) => this.onCityInput(a) }/>
-          { this.state.headerVisible &&
+          { 
+            this.state.headerVisible &&
             <h1>Wheater in  <span>{ this.state.weatherInCity }</span></h1>
           }
           {
             this.state.isLoaded &&
-            <WeatherInfo weatherToShow={this.state.fullWeather} />
+            <WeatherInfo dataComing={this.state.isLoaded} weatherToShow={this.state.fullWeather} />
           }
-          
+          { this.state.isLoaded &&
+            <div className="tab">
+              <nav className="tab__nav">
+                <div className="tab__nav-item js-tab" onClick={this.onClickedTab.bind(this)} id={this.state.tomorrow}>Pogoda na<br /> {this.state.tomorrow}</div>
+                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.dayAfterTomorrow}>Pogoda na<br /> {this.state.dayAfterTomorrow}</div>
+                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.secondDayAfterTomorrow}>Pogoda na<br /> {this.state.secondDayAfterTomorrow}</div>
+              </nav>
+              <div className="tab__content">
+                { 
+                  this.state.clickedTab === this.state.tomorrow &&
+                  <div className="tab__content-item" name={this.state.tomorrow}>
+                    <TabInfo forecastToShow={this.state.forecastTomorrow}/>
+                  </div>
+                }
+                { 
+                  this.state.clickedTab === this.state.dayAfterTomorrow &&
+                  <div className="tab__content-item" name={this.state.dayAfterTomorrow}>
+                    <TabInfo forecastToShow={this.state.forecastDayAfterTomorrow}/>
+                  </div>
+                }
+                { 
+                  this.state.clickedTab === this.state.secondDayAfterTomorrow &&
+                  <div className="tab__content-item" name={this.state.secondDayAfterTomorrow}>
+                    <TabInfo forecastToShow={this.state.forecastSecondDayAfterTomorrow}/>
+                  </div>
+                }
+              </div>
+            </div>
+          }
           
       </div>
     );
