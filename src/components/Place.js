@@ -1,34 +1,37 @@
 import React, { Component } from 'react';
 
 export default class Place extends Component {
-    constructor(props) {
-        super(props)
+  constructor(props) {
+    super(props)
 
-        this.state = {
-            newPlace: ''
-        }
+    this.state = {
+      newPlace: ''
     }
+  }
 
-    pickedPlace(e) {
-        let place = e.target.value;
-        this.setState({
-            pickedPlace: place
-        })
+  pickedPlace(e) {
+    let place = e.target.value;
+    this.setState({
+      pickedPlace: place
+    })
+  }
 
-        
-    }
+  checkWeather(e) {
+    e.preventDefault();
+    this.props.newPlace(this.state.pickedPlace)
+  }
 
-    checkWeather() {
-        this.props.newPlace(this.state.pickedPlace)
-    }
-
-    render () {
-        return (
-            <div>
-                <label htmlFor="place">Where you want to check weather?</label>
-                <input id="place" type="text" value={ this.state.place } onChange={ (e) => this.pickedPlace(e) }></input>
-                <button onClick={ () => this.checkWeather() }>Let's check!</button>
-            </div>
-        );
-    }
+  render () {
+    return (
+      <div className="c-place">
+        <form>
+          <div className="c-place__wrapper">
+            <label className="c-place__label" htmlFor="place">Where you want to check the weather?</label>
+            <input className="c-place__input" id="place" type="text" placeholder="Type here..." value={ this.state.place } onChange={ (e) => this.pickedPlace(e) }></input>
+          </div>
+          <button onClick={ (e) => this.checkWeather(e) }>Let's check!</button>
+        </form>
+      </div>
+    );
+  }
 }

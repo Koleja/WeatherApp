@@ -1,0 +1,41 @@
+@keyframes blink-1 {
+    0%,
+    50%,
+    100% {
+      opacity: 1;
+    }
+    25%,
+    75% {
+      opacity: 0;
+    }
+}
+
+.c-place {
+
+    &__label {
+        display: block;
+    }
+
+    &__input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        font-size: inherit;
+        color: inherit;
+        animation: blink-1 5s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
+
+        &:active, &:focus {
+            animation: none;
+
+            &::placeholder {
+                color: inherit;
+            }
+        }
+
+        &::placeholder {
+            color: inherit;
+            font-size: inherit;
+        }
+    }
+}
+
