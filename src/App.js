@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.scss';
+import './styles/App.scss';
 import Place from './components/Place';
 import WeatherInfo from './components/WeatherInfo';
 import TabInfo from './components/TabInfo';
@@ -173,8 +173,8 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-          
+      <div className="m-main">
+        <div className="m-main__conatiner">
           <Place newPlace={ (a) => this.onCityInput(a) }/>
           { 
             this.state.headerVisible &&
@@ -213,7 +213,7 @@ class App extends Component {
               </div>
             </div>
           }
-          
+        </div>
       </div>
     );
   }

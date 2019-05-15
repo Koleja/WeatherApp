@@ -1,6 +1,13 @@
-.App {
-    padding: 10vw;
-    text-align: center;
+.m-main {
+    min-height: 100vh;
+    min-width: 100vw;
+    background:  linear-gradient(to bottom, rgba(1,115,141,1) 0%, rgba(59,199,190,1) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+
 }
 
 
