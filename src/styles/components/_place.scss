@@ -32,6 +32,10 @@
             }
         }
 
+        &.picked {
+            animation: none;
+        }
+
         &::placeholder {
             color: inherit;
             font-size: inherit;

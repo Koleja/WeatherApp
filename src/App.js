@@ -45,12 +45,13 @@ class App extends Component {
     }
   }
 
-  onCityInput(place) {
+  onCityInput(place, bool) {
     let newPlace = place;
 
     this.setState({
       weatherInCity: newPlace,
-      headerVisible: true
+      headerVisible: true,
+      isLoaded: bool
     })
 
     this.apiCallWeather(newPlace);
@@ -178,7 +179,7 @@ class App extends Component {
           <Place newPlace={ (a) => this.onCityInput(a) }/>
           { 
             this.state.headerVisible &&
-            <h1>Wheater in  <span>{ this.state.weatherInCity }</span></h1>
+            <h1>Wheater in  <span className="m-main__city">{ this.state.weatherInCity }</span></h1>
           }
           {
             this.state.isLoaded &&
@@ -186,10 +187,11 @@ class App extends Component {
           }
           { this.state.isLoaded &&
             <div className="tab">
+              <p>Check also:</p>
               <nav className="tab__nav">
-                <div className="tab__nav-item js-tab" onClick={this.onClickedTab.bind(this)} id={this.state.tomorrow}>Pogoda na<br /> {this.state.tomorrow}</div>
-                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.dayAfterTomorrow}>Pogoda na<br /> {this.state.dayAfterTomorrow}</div>
-                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.secondDayAfterTomorrow}>Pogoda na<br /> {this.state.secondDayAfterTomorrow}</div>
+                <div className="tab__nav-item js-tab" onClick={this.onClickedTab.bind(this)} id={this.state.tomorrow}>Weather on<br /> {this.state.tomorrow}</div>
+                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.dayAfterTomorrow}>Weather on<br /> {this.state.dayAfterTomorrow}</div>
+                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.secondDayAfterTomorrow}>Weather on<br /> {this.state.secondDayAfterTomorrow}</div>
               </nav>
               <div className="tab__content">
                 { 

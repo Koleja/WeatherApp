@@ -8,6 +8,10 @@
     align-items: center;
     color: #ffffff;
     font-size: 26px;
+
+    &__city {
+        text-transform: capitalize;
+    }
 }
 
 

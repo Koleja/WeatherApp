@@ -14,11 +14,12 @@ export default class Place extends Component {
     this.setState({
       pickedPlace: place
     })
+    e.target.classList.add('picked')
   }
 
   checkWeather(e) {
     e.preventDefault();
-    this.props.newPlace(this.state.pickedPlace)
+    this.props.newPlace(this.state.pickedPlace, false)
   }
 
   render () {
