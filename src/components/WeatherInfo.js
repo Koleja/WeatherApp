@@ -31,14 +31,21 @@ export default class WeatherInfo extends Component {
                 {
                     this.props.dataComing &&
                     <div className="c-weather__container">
-                        <p className="c-weather__item">Temperature: 
-                            <span className="c-weather__item-data"> {this.state.weatherData.temperature} °C</span></p>
-                        <p className="c-weather__item">Overall: 
-                            <span className="c-weather__item-data"> {this.state.weatherData.weather}</span></p>
-                        <p className="c-weather__item">Wind: 
-                            <span className="c-weather__item-data"> {this.state.weatherData.wind} m/s</span></p>
-                        <p className="c-weather__item">Pressure: 
-                            <span className="c-weather__item-data"> {this.state.weatherData.pressure} hPa</span></p>
+                        <div className="c-weather__extra">
+                            <p>day</p>
+                            <p>date</p>
+                            <p>Wind: {this.state.weatherData.wind} m/s</p>
+                        </div>
+                        <div className="c-weather__overall">
+                            {this.state.weatherData.weather}
+                        </div>
+                        <div className="c-weather__main">
+                            <div className="c-weather__main--small">
+                                {this.state.weatherData.tempMin},
+                                {this.state.weatherData.tempMax}
+                            </div>
+                            {this.state.weatherData.temperature} °C
+                        </div>
                     </div>
                 }
             </div>

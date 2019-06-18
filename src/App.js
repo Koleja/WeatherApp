@@ -18,10 +18,14 @@ class App extends Component {
       tomorrow: this.createDate(1),
       dayAfterTomorrow: this.createDate(2),
       secondDayAfterTomorrow: this.createDate(3),
+      fourthDay: this.createDate(4),
+      fifthDay: this.createDate(5),
+      sixthDay: this.createDate(6),
       fullWeather: {
         temperature: '',
+        tempMin: '',
+        tempMax: '',
         wind: '',
-        pressure: '',
         weather: '',
       },
       forecastTomorrow: {
@@ -79,6 +83,13 @@ class App extends Component {
     return newDate
   }
 
+  getDay(date) {
+    //let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    let d = new Date(date);
+    let dayName = d.toString().split(' ')[0];
+    return dayName
+  }
+
   getForecast(forDay, apiEl, dayForecast) {
 
     forDay += ' 12:00:00'
@@ -116,7 +127,8 @@ class App extends Component {
             fullWeather: {
               temperature: self.KtoC(result.main.temp),
               weather: result.weather[0].description,
-              pressure: result.main.pressure,
+              tempMin: self.KtoC(result.main.temp_min),
+              tempMax: self.KtoC(result.main.temp_max),
               wind: result.wind.speed
             },
             isLoaded: true,
@@ -177,21 +189,41 @@ class App extends Component {
       <div className="m-main">
         <div className="m-main__conatiner">
           <Place newPlace={ (a) => this.onCityInput(a) }/>
-          { 
-            this.state.headerVisible &&
-            <h1>Wheater in  <span className="m-main__city">{ this.state.weatherInCity }</span></h1>
-          }
-          {
-            this.state.isLoaded &&
-            <WeatherInfo dataComing={this.state.isLoaded} weatherToShow={this.state.fullWeather} />
-          }
+
+          <div className={`m-main__weather ${this.state.isLoaded ? "bg-shape" : ""}`}>
+            { 
+              this.state.headerVisible &&
+              <div>
+                <h1><span className="m-main__city">{ this.state.weatherInCity }</span></h1>
+              </div>
+            }
+            {
+              this.state.isLoaded &&
+              <WeatherInfo dataComing={this.state.isLoaded} weatherToShow={this.state.fullWeather} />
+            }
+          </div>
+          
           { this.state.isLoaded &&
             <div className="tab">
-              <p>Check also:</p>
               <nav className="tab__nav">
-                <div className="tab__nav-item js-tab" onClick={this.onClickedTab.bind(this)} id={this.state.tomorrow}>Weather on<br /> {this.state.tomorrow}</div>
-                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.dayAfterTomorrow}>Weather on<br /> {this.state.dayAfterTomorrow}</div>
-                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.secondDayAfterTomorrow}>Weather on<br /> {this.state.secondDayAfterTomorrow}</div>
+                <div className="tab__nav-item js-tab" onClick={this.onClickedTab.bind(this)} id={this.state.tomorrow}>
+                  {this.getDay(this.state.tomorrow)}
+                </div>
+                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.dayAfterTomorrow}>
+                  {this.getDay(this.state.dayAfterTomorrow)}
+                </div>
+                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.secondDayAfterTomorrow}>
+                  {this.getDay(this.state.secondDayAfterTomorrow)}
+                </div>
+                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.fourthDay}>
+                  {this.getDay(this.state.fourthDay)}
+                </div>
+                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.fifthDay}>
+                  {this.getDay(this.state.fifthDay)}
+                </div>
+                <div className="tab__nav-item js-tab" onClick={(e) => this.onClickedTab(e)} id={this.state.sixthDay}>
+                  {this.getDay(this.state.sixthDay)}
+                </div>
               </nav>
               <div className="tab__content">
                 { 
